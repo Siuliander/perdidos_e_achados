@@ -10,9 +10,9 @@ exports.BuscarTodosItensPerdidos = async (req, res) => {
 
         const itensPerdidos = await ItemPerdido.find({descricao, data_perda, local_perda, categoria})
 
-        if(itensPerdidos.length <= 0) res.status(404).json({ error: 'Sem Itens perdidos' });
+        if(itensPerdidos.length <= 0) return res.status(404).json({ error: 'Sem Itens perdidos' });
 
-        res.status(200).json({count: itensPerdidos.length, result: itensPerdidos});
+        return res.status(200).json({count: itensPerdidos.length, result: itensPerdidos});
     } catch (error) {
         log.error(`Erro ao buscar itens perdidos: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao buscar itens perdidos' });
@@ -29,9 +29,9 @@ exports.BuscarMeusItensPerdidos = async (req, res) => {
 
         const itensPerdidos = await ItemPerdido.find({usuario, descricao, data_perda, local_perda, categoria})
 
-        if(itensPerdidos.length <= 0) res.status(404).json({ error: 'Sem Itens meus perdidos' });
+        if(itensPerdidos.length <= 0) return res.status(404).json({ error: 'Sem Itens meus perdidos' });
 
-        res.status(200).json({count: itensPerdidos.length, result: itensPerdidos});
+        return res.status(200).json({count: itensPerdidos.length, result: itensPerdidos});
     } catch (error) {
         log.error(`Erro ao buscar meus itens perdidos: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao buscar meus itens perdidos' });
@@ -45,7 +45,7 @@ exports.BuscarItemPerdidoID = async (req, res) => {
         if (!itemPerdido || itemPerdido.length <= 0) {
             return res.status(404).json({ error: 'Item perdido não encontrado' });
         }
-        res.status(200).json({count: itemPerdido.length, result: itemPerdido});
+        return res.status(200).json({count: itemPerdido.length, result: itemPerdido});
     } catch (error) {
         log.error(`Erro ao buscar item perdido por ID: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao buscar item perdido por ID' });
@@ -68,11 +68,11 @@ exports.createItemPerdido = async (req, res) => {
             categoria
         });
 
-        if(!criarNovoItem) res.status(500).json({ error: 'Erro ao criar item perdido' });
+        if(!criarNovoItem) return res.status(500).json({ error: 'Erro ao criar item perdido' });
         
         const novoItem = [{ id_item_perdido: criarNovoItem, id_usuario: req.usuario.id, descricao, data_perda, local_perda, id_categoria: categoria, status: 1 }]
 
-        res.status(201).json({count: novoItem.length, result: novoItem, mensagem: "Item Perdido publicado com sucesso"});
+        return res.status(201).json({count: novoItem.length, result: novoItem, mensagem: "Item Perdido publicado com sucesso"});
     } catch (error) {
         log.error(`Erro ao criar item perdido: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao criar item perdido' });
@@ -102,7 +102,7 @@ exports.updateItemPerdido = async (req, res) => {
         
         if (!salvarAlteracao)  return res.status(400).json({ error: 'Item perdido não actualizado' });
 
-        res.status(201).json({count: itemPerdido.length,  affected: salvarAlteracao, result: itemPerdido, mensagem: "Item Perdido actualizado com sucesso"});
+        return res.status(201).json({count: itemPerdido.length,  affected: salvarAlteracao, result: itemPerdido, mensagem: "Item Perdido actualizado com sucesso"});
     } catch (error) {
         log.error(`Erro ao atualizar item perdido: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao atualizar item perdido' });
@@ -122,9 +122,9 @@ exports.deleteItemPerdido = async (req, res) => {
 
         const removerItem = await ItemPerdido.remove(id, req.usuario.id)
         
-        if (!removerItem)  return res.status(400).json({ error: 'Item perdido não eliminado' });
+        if (!removerItem) return res.status(400).json({ error: 'Item perdido não eliminado' });
 
-        res.status(200).json({count: 0, affected: removerItem, result: [], mensagem: "Item Perdido eliminado com sucesso"});
+        return res.status(200).json({count: 0, affected: removerItem, result: [], mensagem: "Item Perdido eliminado com sucesso"});
     } catch (error) {
         log.error(`Erro ao eliminar item perdido: ${error.message}`);
         return res.status(500).json({ error: 'Erro ao eliminar item perdido' });
