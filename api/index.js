@@ -36,12 +36,14 @@ try {
     /**
      * IMPORTANDO AS ROTAS
      */
-    
+    const rotaAutenticacao = require('./routers/route-Autenticacao');
+    const rotaItemPerdido = require('./routers/route-ItemPerdido');
 
     /**
      * USANDO OU CRIANDO AS ROTAS
      */
-    
+    app.use('/auth',rotaAutenticacao);
+    app.use('/perdidos',rotaItemPerdido);
 
 
 } catch (error) { 
